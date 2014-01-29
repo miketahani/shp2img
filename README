@@ -1,5 +1,6 @@
-ultra-hacky one-off to generate heightmaps from shapefiles. mostly a way for 
-me to learn how to use PIL and read shapefiles.
+ultra-hacky one-off to generate heightmaps from shapefiles. useful for creating
+heightmaps for use in shaders (3d/glsl). mostly a way for me to learn how to use 
+PIL and read shapefiles.
 
 requires pyshp and PIL
 
