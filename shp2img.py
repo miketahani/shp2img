@@ -38,6 +38,7 @@ parser.add_option('-g', '--greyscale',
 (options, args) = parser.parse_args()
 
 
+hmin, hmax = 38, 39 # building heights (z_min, z_max)
 
 def calc_height(record):
     # calculate height
