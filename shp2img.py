@@ -61,17 +61,17 @@ def interpolate(value, dr):
 
 def draw_heightmap(column):
     
-    bbox = sf.bbox
+    lng_min, lat_min, lng_max, lat_max = sf.bbox
     shapes = sf.shapeRecords()
 
     width = options.width
     # make height proportional to original width
-    w_diff = bbox[2] - bbox[0]
-    h_diff = bbox[3] - bbox[1]
+    w_diff = lng_max - lng_min
+    h_diff = lat_max - lat_min
     height = int(h_diff / w_diff * width)
     # arguments for the linear interpolation function:
-    x_args = {'domain': [bbox[0], bbox[2]], 'range': [0, width ]}
-    y_args = {'domain': [bbox[1], bbox[3]], 'range': [height, 0]}
+    x = {'domain': [lng_min, lng_max], 'range': [0, width ]}
+    y = {'domain': [lat_min, lat_max], 'range': [height, 0]}
 
     # map heights to a range of 2-255 (red value)
     if (options.buildings):
@@ -94,8 +94,8 @@ def draw_heightmap(column):
         points = map(
                      lambda (lng, lat): 
                         tuple([
-                              interpolate(lng, x_args), 
-                              interpolate(lat, y_args)
+                              interpolate(lng, x), 
+                              interpolate(lat, y)
                         ]), 
                         shape.shape.points
         )
