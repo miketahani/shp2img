@@ -78,14 +78,13 @@ def draw_heightmap(column):
 
     for shape in shapes:
         # do a linear interpolation of lnglats to fit inside our drawing frame
-        points = map(
-                     lambda (lng, lat): 
-                        tuple([
-                              interpolate(lng, x), 
-                              interpolate(lat, y)
-                        ]), 
-                        shape.shape.points
-        )
+        points = [
+            tuple([
+                  interpolate(lng, x), 
+                  interpolate(lat, y)
+            ]) 
+            for (lng, lat) in shape.shape.points
+        ]
 
         if (options.buildings):
             height = calc_height(shape.record)
