@@ -31,6 +31,10 @@ parser.add_option('-b', '--sf_buildings',
                   action='store_true',
                   dest='buildings', default=False,
                   help='for use with the sf building footprints data')
+parser.add_option('-g', '--greyscale',
+                  action='store_true',
+                  dest='greyscale', default=False,
+                  help='greyscale heightmap')
 (options, args) = parser.parse_args()
 
 
@@ -74,6 +78,7 @@ def draw_heightmap(column):
     y = {'domain': [lat_min, lat_max], 'range': [height, 0]}
 
     # map heights to a range of 2-255 (red value)
+    # leaves green and blue channels open for other data
     if (options.buildings):
         heights = [calc_height(shape.record) for shape in shapes]
     else:
@@ -85,10 +90,6 @@ def draw_heightmap(column):
     draw = ImageDraw.Draw(im)
 
     for shape in shapes:
-        if (options.buildings):
-            height = calc_height(shape.record)
-        else:
-            height = shape.record[column]
         # do a linear interpolation of lnglats to fit inside our drawing frame
         #                       tuples for draw.polygon
         points = map(
@@ -99,7 +100,16 @@ def draw_heightmap(column):
                         ]), 
                         shape.shape.points
         )
-        draw.polygon(points, fill=int(interpolate(height, fill)))
+
+        if (options.buildings):
+            height = calc_height(shape.record)
+        else:
+            height = shape.record[column]
+
+        color = int(interpolate(height, fill))
+        if (options.greyscale): color = tuple([color]*3)
+        
+        draw.polygon(points, fill=color)
         # draw.line(points, fill=int(li(height, fill)))
 
     del draw
