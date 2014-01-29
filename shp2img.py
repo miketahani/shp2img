@@ -19,8 +19,8 @@ parser.add_option('-s', '--show_columns',
                   dest='show_columns', default=False,
                   help='show attribute column indices/headers and exit')
 parser.add_option('-c', '--column',
-                  dest='column', type='int',
-                  help='selected attribute\'s column index')
+                  dest='column', type='str',
+                  help='selected attribute')
 parser.add_option('-w', '--width',
                   dest='width', default=2048, type='int',
                   help='output width (height will scale proportionally)')
@@ -38,8 +38,6 @@ parser.add_option('-g', '--greyscale',
 (options, args) = parser.parse_args()
 
 
-hmin, hmax = 38, 39 # building heights (z_min, z_max)
-
 def calc_height(record):
     # calculate height
     #return record[hmin] + (record[hmax]-record[hmin])
@@ -51,8 +49,9 @@ def interpolate(value, dr):
     r = dr['range']
     return r[0] + ((value-d[0])/(d[1]-d[0])) * (r[1]-r[0])
 
-def draw_heightmap(column):
-    
+def draw_heightmap(column_name):
+    column = columns[column_name]
+
     lng_min, lat_min, lng_max, lat_max = sf.bbox
     shapes = sf.shapeRecords()
 
@@ -107,11 +106,13 @@ if __name__ == '__main__':
     # load shapefile
     sf = shapefile.Reader(options.filename)
 
+    columns = {col[0]: i for (i, col) in enumerate(sf.fields[1:])}
+
     if (options.show_columns):
-        for (i,e) in enumerate(sf.fields[1:]): 
-            print i, ':', e
+        for col in columns: print col
         sys.exit()
     else:
+        hmin, hmax = columns['z_min'], columns['z_max']
         draw_heightmap(options.column)
         sys.exit()
 
