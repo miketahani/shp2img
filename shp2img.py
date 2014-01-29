@@ -38,19 +38,6 @@ parser.add_option('-g', '--greyscale',
 (options, args) = parser.parse_args()
 
 
-# shp_filename = 'shp/mars_merc_3dia_g'
-sf = shapefile.Reader(options.filename)
-
-# COLUMNS
-# XXX FIX: for building heights, you're going to need z_min+(z_max-z_min)
-# which should place the vertex where it needs to go wrt terrain elevation (elev + height)
-z_min = 38
-z_max = 39
-minheight = 10
-maxheight = 11
-hmin = z_min
-hmax = z_max
-#col = 2   # MARS contours!
 
 def calc_height(record):
     # calculate height
@@ -69,7 +56,7 @@ def draw_heightmap(column):
     shapes = sf.shapeRecords()
 
     width = options.width
-    # make height proportional to original width
+    # make height proportional to width
     w_diff = lng_max - lng_min
     h_diff = lat_max - lat_min
     height = int(h_diff / w_diff * width)
@@ -91,7 +78,6 @@ def draw_heightmap(column):
 
     for shape in shapes:
         # do a linear interpolation of lnglats to fit inside our drawing frame
-        #                       tuples for draw.polygon
         points = map(
                      lambda (lng, lat): 
                         tuple([
@@ -110,13 +96,17 @@ def draw_heightmap(column):
         if (options.greyscale): color = tuple([color]*3)
         
         draw.polygon(points, fill=color)
-        # draw.line(points, fill=int(li(height, fill)))
+        # draw.line(points, fill=color)
 
     del draw
 
     im.save(options.outfile, options.ext)
 
 if __name__ == '__main__':
+
+    # load shapefile
+    sf = shapefile.Reader(options.filename)
+
     if (options.show_columns):
         for (i,e) in enumerate(sf.fields[1:]): 
             print i, ':', e
