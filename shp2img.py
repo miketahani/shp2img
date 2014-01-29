@@ -59,7 +59,7 @@ def calc_height(record):
     #return record[hmin] + (record[hmax]-record[hmin])
     return record[hmax] - record[hmin]
 
-def draw_heightmap():
+def draw_heightmap(column):
     
     bbox = sf.bbox
     shapes = sf.shapeRecords()
@@ -71,13 +71,13 @@ def draw_heightmap():
     height = int(h_diff / w_diff * width)
     # arguments for the linear interpolation function:
     x_args = {'domain': [bbox[0], bbox[2]], 'range': [0, width ]}
-    y_args = {'domain': [bbox[1], bbox[3]], 'range': [0, height]}
+    y_args = {'domain': [bbox[1], bbox[3]], 'range': [height, 0]}
 
     # map heights to a range of 2-255 (red value)
     if (options.buildings):
         heights = [calc_height(shape.record) for shape in shapes]
     else:
-        heights = [shape.record[col] for shape in shapes]
+        heights = [shape.record[column] for shape in shapes]
     
     fill = {'domain': [min(heights), max(heights)], 'range': [2, 255]}
 
@@ -88,9 +88,9 @@ def draw_heightmap():
         if (options.buildings):
             height = calc_height(shape.record)
         else:
-            height = shape.record[col]
+            height = shape.record[column]
         # do a linear interpolation of lnglats to fit inside our drawing frame
-        #                       tuples for draw.polygon;  upside down, subtract from height (?)
+        #                       tuples for draw.polygon
         points = map(lambda pt: tuple([li(pt[0], x_args), li(pt[1], y_args)]), shape.shape.points)
         draw.polygon(points, fill=int(li(height, fill)))
         # draw.line(points, fill=int(li(height, fill)))
@@ -105,8 +105,7 @@ if __name__ == '__main__':
             print i, ':', e
         sys.exit()
     else:
-        col = options.column
-        draw_heightmap()
+        draw_heightmap(options.column)
         sys.exit()
 
 
