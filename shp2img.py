@@ -51,8 +51,8 @@ def interpolate(value, dr):
 
 def draw_heightmap(column):
 
-    lng_min, lat_min, lng_max, lat_max = sf.bbox
-    shapes = sf.shapeRecords()
+    lng_min, lat_min, lng_max, lat_max = shp.bbox
+    shapes = shp.shapeRecords()
 
     width = options.width
     # make height proportional to width
@@ -103,9 +103,9 @@ def draw_heightmap(column):
 if __name__ == '__main__':
 
     # load shapefile
-    sf = shapefile.Reader(options.filename)
+    shp = shapefile.Reader(options.filename)
 
-    columns = {col[0]: i for (i, col) in enumerate(sf.fields[1:])}
+    columns = {col[0]: i for (i, col) in enumerate(shp.fields[1:])}
 
     if (options.show_columns):
         for col in columns: print col
