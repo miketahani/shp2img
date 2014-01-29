@@ -8,33 +8,33 @@ from optparse import OptionParser
 
 # command-line options
 parser = OptionParser()
-parser.add_option('-f', '--filename', dest='filename',
-                  default='shp/footprints',
+parser.add_option('-f', '--filename', 
+                  dest='filename', default='shp/footprints',
                   help='shapefile to convert (omit extension)')
-parser.add_option('-o', '--out',
-                  dest='outfile', default=sys.stdout,
-                  help='png outfile (defaults to stdout)')
-parser.add_option('-s', '--show_columns',
-                  action='store_true',
-                  dest='show_columns', default=False,
-                  help='show attributes and exit')
 parser.add_option('-c', '--column',
                   dest='column', type='str',
                   help='selected attribute')
+parser.add_option('-o', '--out',
+                  dest='outfile', default=sys.stdout,
+                  help='outfile name (defaults to stdout)')
 parser.add_option('-w', '--width',
                   dest='width', default=2048, type='int',
                   help='output width (height will scale proportionally)')
 parser.add_option('-e', '--extension',
                   dest='ext', default='PNG',
                   help='output file type (defaults to PNG)')
-parser.add_option('-b', '--sf_buildings',
-                  action='store_true',
-                  dest='buildings', default=False,
-                  help='for use with the sf building footprints data')
 parser.add_option('-g', '--greyscale',
                   action='store_true',
                   dest='greyscale', default=False,
                   help='greyscale heightmap')
+parser.add_option('-s', '--show_columns',
+                  action='store_true',
+                  dest='show_columns', default=False,
+                  help='show attributes and exit')
+parser.add_option('-b', '--sf_buildings',
+                  action='store_true',
+                  dest='buildings', default=False,
+                  help='for use with the sf building footprints data')
 (options, args) = parser.parse_args()
 
 
