@@ -34,10 +34,10 @@ parser.add_option('-b', '--sf_buildings',
 
 (options, args) = parser.parse_args()
 
-def li(value, args):
+def li(value, dr):
     # linear interpolation
-    d = args['domain']
-    r = args['range']
+    d = dr['domain']
+    r = dr['range']
     return r[0] + ((value-d[0])/(d[1]-d[0])) * (r[1]-r[0])
 
 # shp_filename = 'shp/mars_merc_3dia_g'
