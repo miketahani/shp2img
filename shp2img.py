@@ -19,10 +19,10 @@ parser.add_option('-s', '--show_columns',
                   dest='show_columns', default=False,
                   help='show attribute column indices/headers and exit')
 parser.add_option('-c', '--column',
-                  dest='column',
+                  dest='column', type='int',
                   help='selected attribute\'s column index')
 parser.add_option('-w', '--width',
-                  dest='width', default=2048,
+                  dest='width', default=2048, type='int',
                   help='output width (height will scale proportionally)')
 parser.add_option('-e', '--extension',
                   dest='ext', default='PNG',
@@ -105,7 +105,7 @@ if __name__ == '__main__':
             print i, ':', e
         sys.exit()
     else:
-        col = int(options.column)
+        col = options.column
         draw_heightmap()
         sys.exit()
 
