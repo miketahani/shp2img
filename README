@@ -4,6 +4,7 @@ PIL and read shapefiles.
 
 requires pyshp (easy_install pyshp) and PIL
 
+
 Usage: shp2img.py [options]
 
 Options:
@@ -11,12 +12,14 @@ Options:
   -f FILENAME, --filename=FILENAME
                         shapefile to convert (omit extension)
   -o OUTFILE, --out=OUTFILE
-                        png outfile (defaults to stdout)
-  -s, --show_columns    show attribute column indices/headers and exit
+                        outfile name (defaults to stdout)
+  -s, --show_columns    show attributes and exit
   -c COLUMN, --column=COLUMN
-                        selected attribute's column index
+                        selected attribute
   -w WIDTH, --width=WIDTH
                         output width (height will scale proportionally)
   -e EXT, --extension=EXT
                         output file type (defaults to PNG)
   -b, --sf_buildings    for use with the sf building footprints data
+  -g, --greyscale       greyscale heightmap
+

@@ -17,7 +17,7 @@ parser.add_option('-o', '--out',
 parser.add_option('-s', '--show_columns',
                   action='store_true',
                   dest='show_columns', default=False,
-                  help='show attribute column indices/headers and exit')
+                  help='show attributes and exit')
 parser.add_option('-c', '--column',
                   dest='column', type='str',
                   help='selected attribute')
