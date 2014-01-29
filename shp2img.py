@@ -49,8 +49,7 @@ def interpolate(value, dr):
     r = dr['range']
     return r[0] + ((value-d[0])/(d[1]-d[0])) * (r[1]-r[0])
 
-def draw_heightmap(column_name):
-    column = columns[column_name]
+def draw_heightmap(column):
 
     lng_min, lat_min, lng_max, lat_max = sf.bbox
     shapes = sf.shapeRecords()
@@ -113,7 +112,8 @@ if __name__ == '__main__':
         sys.exit()
     else:
         hmin, hmax = columns['z_min'], columns['z_max']
-        draw_heightmap(options.column)
+        attribute = columns[options.column]
+        draw_heightmap(attribute)
         sys.exit()
 
 
