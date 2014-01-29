@@ -31,14 +31,8 @@ parser.add_option('-b', '--sf_buildings',
                   action='store_true',
                   dest='buildings', default=False,
                   help='for use with the sf building footprints data')
-
 (options, args) = parser.parse_args()
 
-def li(value, dr):
-    # linear interpolation
-    d = dr['domain']
-    r = dr['range']
-    return r[0] + ((value-d[0])/(d[1]-d[0])) * (r[1]-r[0])
 
 # shp_filename = 'shp/mars_merc_3dia_g'
 sf = shapefile.Reader(options.filename)
@@ -58,6 +52,12 @@ def calc_height(record):
     # calculate height
     #return record[hmin] + (record[hmax]-record[hmin])
     return record[hmax] - record[hmin]
+
+def interpolate(value, dr):
+    # linear interpolation
+    d = dr['domain']
+    r = dr['range']
+    return r[0] + ((value-d[0])/(d[1]-d[0])) * (r[1]-r[0])
 
 def draw_heightmap(column):
     
@@ -91,8 +91,15 @@ def draw_heightmap(column):
             height = shape.record[column]
         # do a linear interpolation of lnglats to fit inside our drawing frame
         #                       tuples for draw.polygon
-        points = map(lambda pt: tuple([li(pt[0], x_args), li(pt[1], y_args)]), shape.shape.points)
-        draw.polygon(points, fill=int(li(height, fill)))
+        points = map(
+                     lambda (lng, lat): 
+                        tuple([
+                              interpolate(lng, x_args), 
+                              interpolate(lat, y_args)
+                        ]), 
+                        shape.shape.points
+        )
+        draw.polygon(points, fill=int(interpolate(height, fill)))
         # draw.line(points, fill=int(li(height, fill)))
 
     del draw
