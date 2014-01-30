@@ -11,6 +11,7 @@ requires pyshp (`easy_install pyshp`) and PIL
 
 ### usage
 
+
     Usage: shp2img.py --rgb=attr1,attr2,attr3 [options]
 
     Options:
@@ -20,11 +21,11 @@ requires pyshp (`easy_install pyshp`) and PIL
                             shapefile to convert (omit extension)
       -o OUTFILE, --out=OUTFILE
                             outfile name (defaults to stdout)
-      -w WIDTH, --width=WIDTH
-                            output width (height will scale proportionally)
+      -s SIZE, --size=SIZE  max output dimension (width/height will scale
+                            proportionally)
       -e EXT, --extension=EXT
                             output file type (defaults to PNG)
-      -s, --show_columns    show attributes and exit
+      -c, --show_columns    show attributes and exit
 
     Channels Usage:
       you must define a shapefile attribute per r,g,b color channel.
