@@ -17,17 +17,18 @@ def interpolate(value, dr):
 
 def draw_heightmap(channels):
 
-    lng_min, lat_min, lng_max, lat_max = shp.bbox
+    # lng_min, lat_min, lng_max, lat_max = shp.bbox
+    lng_min, lat_max, lng_max, lat_min = shp.bbox
     shapes = shp.shapeRecords()
 
     width = options.width
     # make height proportional to width
-    w_diff = lng_max - lng_min
-    h_diff = lat_max - lat_min
+    w_diff = abs(lng_max - lng_min)
+    h_diff = abs(lat_max - lat_min)
     height = int(h_diff / w_diff * width)
     # arguments for the linear interpolation function:
     x = {'domain': [lng_min, lng_max], 'range': [0, width ]}
-    y = {'domain': [lat_min, lat_max], 'range': [height, 0]}
+    y = {'domain': [lat_min, lat_max], 'range': [0, height]} #[height, 0]}
 
     # all values for selected attributes (unless the channel is empty (None))
     heights = [[shape.record[col] for shape in shapes] if col else None for col in channels]
