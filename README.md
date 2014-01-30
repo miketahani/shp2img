@@ -1,8 +1,13 @@
-ultra-hacky one-off to generate heightmaps from shapefiles. useful for creating
-heightmaps for use in shaders (3d/glsl). mostly a way for me to learn how to use 
+### what?
+
+ultra-hacky one-off to generate multi-channel heightmaps from shapefiles using 1-3 attributes. 
+useful for creating heightmaps for shaders (3d/glsl). mostly a way for me to learn how to use 
 PIL and read shapefiles.
 
+### requirements
 requires pyshp (`easy_install pyshp`) and PIL
+
+### usage
 
     Usage: shp2img.py --rgb=attr1,attr2,attr3 [options]
 
