@@ -1,3 +1,5 @@
+![sf building footprints data](https://raw.github.com/miketahani/shp2img/master/example_output.png)
+
 ### what?
 
 ultra-hacky one-off to generate multi-channel heightmaps from shapefiles using 1-3 attributes. 
