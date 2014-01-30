@@ -20,11 +20,11 @@ Options:
                         output file type (defaults to PNG)
   -s, --show_columns    show attributes and exit
 
-  channels usage:
+Channels Usage:
   you must define a shapefile attribute per r,g,b color channel.
   leave placeholders for unused channels.
-     ex: --rgb=attr1,attr2,attr3 (all three channels)
-         --rgb=attr1,, (red)
-         --rgb=,attr2, (green)
-         --rgb=,,attr3 (blue)
-  
+
+  ex: --rgb=attr1,attr2,attr3 (all three channels)
+      --rgb=attr1,, (red)
+      --rgb=,attr2, (green)
+      --rgb=,,attr3 (blue)

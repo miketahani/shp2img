@@ -67,15 +67,16 @@ if __name__ == '__main__':
         def format_epilog(self, formatter):
             return self.epilog
 
-    epilog = '\n  '.join([
+    epilog = '\n'.join([
         '',
-        'channels usage:',
-        'you must define a shapefile attribute per r,g,b color channel.',
-        'leave placeholders for unused channels.',
-        '   ex: --rgb=attr1,attr2,attr3 (all three channels)',
-        '       --rgb=attr1,, (red)',
-        '       --rgb=,attr2, (green)',
-        '       --rgb=,,attr3 (blue)',
+        'Channels Usage:',
+        '  you must define a shapefile attribute per r,g,b color channel.',
+        '  leave placeholders for unused channels.',
+        '',
+        '  ex: --rgb=attr1,attr2,attr3 (all three channels)',
+        '      --rgb=attr1,, (red)',
+        '      --rgb=,attr2, (green)',
+        '      --rgb=,,attr3 (blue)',
         ''
     ])
 
