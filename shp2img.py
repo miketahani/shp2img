@@ -6,42 +6,8 @@ import Image, ImageDraw
 import sys
 from optparse import OptionParser
 
-# command-line options
-parser = OptionParser()
-parser.add_option('-f', '--filename', 
-                  dest='filename', default='shp/footprints',
-                  help='shapefile to convert (omit extension)')
-parser.add_option('-c', '--column',
-                  dest='column', type='str',
-                  help='selected attribute')
-parser.add_option('-o', '--out',
-                  dest='outfile', default=sys.stdout,
-                  help='outfile name (defaults to stdout)')
-parser.add_option('-w', '--width',
-                  dest='width', default=2048, type='int',
-                  help='output width (height will scale proportionally)')
-parser.add_option('-e', '--extension',
-                  dest='ext', default='PNG',
-                  help='output file type (defaults to PNG)')
-parser.add_option('-g', '--greyscale',
-                  action='store_true',
-                  dest='greyscale', default=False,
-                  help='greyscale heightmap')
-parser.add_option('-s', '--show_columns',
-                  action='store_true',
-                  dest='show_columns', default=False,
-                  help='show attributes and exit')
-parser.add_option('-b', '--sf_buildings',
-                  action='store_true',
-                  dest='buildings', default=False,
-                  help='for use with the sf building footprints data')
-(options, args) = parser.parse_args()
-
-
-def calc_height(record):
-    # calculate height
-    #return record[hmin] + (record[hmax]-record[hmin])
-    return record[hmax] - record[hmin]
+def load_shapefile(filename):
+    return shapefile.Reader(filename)
 
 def interpolate(value, dr):
     # linear interpolation
@@ -49,7 +15,7 @@ def interpolate(value, dr):
     r = dr['range']
     return r[0] + ((value-d[0])/(d[1]-d[0])) * (r[1]-r[0])
 
-def draw_heightmap(column):
+def draw_heightmap(channels):
 
     lng_min, lat_min, lng_max, lat_max = shp.bbox
     shapes = shp.shapeRecords()
@@ -63,15 +29,11 @@ def draw_heightmap(column):
     x = {'domain': [lng_min, lng_max], 'range': [0, width ]}
     y = {'domain': [lat_min, lat_max], 'range': [height, 0]}
 
-    # map heights to a range of 2-255 (red value)
-    # leaves green and blue channels open for other data
-    if (options.buildings):
-        heights = [calc_height(shape.record) for shape in shapes]
-    else:
-        heights = [shape.record[column] for shape in shapes]
+    # all values for selected attributes (unless the channel is empty (None))
+    heights = [[shape.record[col] for shape in shapes] if col else None for col in channels]
+    # arguments for linear interpolation (one for each channel)
+    fills = [{'domain': [min(h), max(h)], 'range': [1, 255]} if h else None for h in heights] 
     
-    fill = {'domain': [min(heights), max(heights)], 'range': [2, 255]}
-
     im = Image.new('RGB', (width, height))
     draw = ImageDraw.Draw(im)
 
@@ -85,14 +47,12 @@ def draw_heightmap(column):
             for (lng, lat) in shape.shape.points
         ]
 
-        if (options.buildings):
-            height = calc_height(shape.record)
-        else:
-            height = shape.record[column]
+        channel_heights = [
+            int(interpolate(shape.record[col], fills[i])) if col else 0 
+            for (i, col) in enumerate(channels)
+        ]
+        color = tuple(channel_heights)
 
-        color = int(interpolate(height, fill))
-        if (options.greyscale): color = tuple([color]*3)
-        
         draw.polygon(points, fill=color)
         # draw.line(points, fill=color)
 
@@ -102,18 +62,69 @@ def draw_heightmap(column):
 
 if __name__ == '__main__':
 
+    # command-line options
+    class CustomParser(OptionParser):
+        def format_epilog(self, formatter):
+            return self.epilog
+
+    epilog = '\n  '.join([
+        '',
+        'channels usage:',
+        'you must define a shapefile attribute per r,g,b color channel.',
+        'leave placeholders for unused channels.',
+        '   ex: --rgb=attr1,attr2,attr3 (all three channels)',
+        '       --rgb=attr1,, (red)',
+        '       --rgb=,attr2, (green)',
+        '       --rgb=,,attr3 (blue)',
+        ''
+    ])
+
+    parser = CustomParser('Usage: %prog --rgb=attr1,attr2,attr3 [options]', epilog=epilog)
+    add_option = parser.add_option
+
+    add_option('--rgb',
+               dest='channels', type='str',
+               help='one attribute per channel (r,g,b -> attr1,attr2,attr3)')
+    add_option('-f', '--filename', 
+               dest='filename', default='shp/footprints',
+               help='shapefile to convert (omit extension)')
+    add_option('-o', '--out',
+               dest='outfile', default=sys.stdout,
+               help='outfile name (defaults to stdout)')
+    add_option('-w', '--width',
+               dest='width', default=2048, type='int',
+               help='output width (height will scale proportionally)')
+    add_option('-e', '--extension',
+               dest='ext', default='PNG',
+               help='output file type (defaults to PNG)')
+    add_option('-s', '--show_columns',
+               action='store_true',
+               dest='show_columns', default=False,
+               help='show attributes and exit')
+
+    (options, args) = parser.parse_args()
+
     # load shapefile
-    shp = shapefile.Reader(options.filename)
+    shp = load_shapefile(options.filename)
 
     columns = {col[0]: i for (i, col) in enumerate(shp.fields[1:])}
 
-    if (options.show_columns):
+    if options.show_columns:
         for col in columns: print col
-        sys.exit()
+
     else:
-        hmin, hmax = columns['z_min'], columns['z_max']
-        attribute = columns[options.column]
-        draw_heightmap(attribute)
-        sys.exit()
+        
+        if not options.channels:
+            parser.error('missing channels')
+
+        channels = [columns[c] if (c and c in columns) else None for c in options.channels.split(',')[:3]]
+
+        # if no user-defined attributes matched the shapefile, we can't build a heightmap
+        if not filter(None, channels):
+            parser.error('no matching attributes found')
+
+        draw_heightmap(channels)
+    
+    sys.exit()
 
 
