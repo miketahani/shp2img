@@ -26,6 +26,9 @@ def draw_heightmap(channels):
     w_diff = abs(lng_max - lng_min)
     h_diff = abs(lat_max - lat_min)
     height = int(h_diff / w_diff * width)
+    if height > width:
+        width = int(w_diff / h_diff * width)
+        height = options.width
     # arguments for the linear interpolation function:
     x = {'domain': [lng_min, lng_max], 'range': [0, width ]}
     y = {'domain': [lat_min, lat_max], 'range': [0, height]} #[height, 0]}
