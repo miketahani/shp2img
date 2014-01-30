@@ -5,20 +5,26 @@ PIL and read shapefiles.
 requires pyshp (easy_install pyshp) and PIL
 
 
-Usage: shp2img.py [options]
+Usage: shp2img.py --rgb=attr1,attr2,attr3 [options]
 
 Options:
   -h, --help            show this help message and exit
+  --rgb=CHANNELS        one attribute per channel (r,g,b -> attr1,attr2,attr3)
   -f FILENAME, --filename=FILENAME
                         shapefile to convert (omit extension)
-  -c COLUMN, --column=COLUMN
-                        selected attribute
   -o OUTFILE, --out=OUTFILE
                         outfile name (defaults to stdout)
   -w WIDTH, --width=WIDTH
                         output width (height will scale proportionally)
   -e EXT, --extension=EXT
                         output file type (defaults to PNG)
-  -g, --greyscale       greyscale heightmap
   -s, --show_columns    show attributes and exit
-  -b, --sf_buildings    for use with the sf building footprints data
+
+  channels usage:
+  you must define a shapefile attribute per r,g,b color channel.
+  leave placeholders for unused channels.
+     ex: --rgb=attr1,attr2,attr3 (all three channels)
+         --rgb=attr1,, (red)
+         --rgb=,attr2, (green)
+         --rgb=,,attr3 (blue)
+  
