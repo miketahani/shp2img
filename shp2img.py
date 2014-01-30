@@ -21,17 +21,17 @@ def draw_heightmap(channels):
     lng_min, lat_max, lng_max, lat_min = shp.bbox
     shapes = shp.shapeRecords()
 
-    width = options.width
+    width = options.size
     # make height proportional to width
     w_diff = abs(lng_max - lng_min)
     h_diff = abs(lat_max - lat_min)
     height = int(h_diff / w_diff * width)
     if height > width:
         width = int(w_diff / h_diff * width)
-        height = options.width
+        height = options.size
     # arguments for the linear interpolation function:
     x = {'domain': [lng_min, lng_max], 'range': [0, width ]}
-    y = {'domain': [lat_min, lat_max], 'range': [0, height]} #[height, 0]}
+    y = {'domain': [lat_min, lat_max], 'range': [0, height]}
 
     # all values for selected attributes (unless the channel is empty (None))
     heights = [[shape.record[col] for shape in shapes] if col else None for col in channels]
@@ -96,13 +96,13 @@ if __name__ == '__main__':
     add_option('-o', '--out',
                dest='outfile', default=sys.stdout,
                help='outfile name (defaults to stdout)')
-    add_option('-w', '--width',
-               dest='width', default=2048, type='int',
-               help='output width (height will scale proportionally)')
+    add_option('-s', '--size',
+               dest='size', default=2048, type='int',
+               help='max output dimension (width/height will scale proportionally)')
     add_option('-e', '--extension',
                dest='ext', default='PNG',
                help='output file type (defaults to PNG)')
-    add_option('-s', '--show_columns',
+    add_option('-c', '--show_columns',
                action='store_true',
                dest='show_columns', default=False,
                help='show attributes and exit')
