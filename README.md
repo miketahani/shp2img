@@ -1,15 +1,15 @@
 ![sf building footprints data](https://raw.github.com/miketahani/shp2img/master/example_output.png)
 
-### what?
+### Description
 
-ultra-hacky one-off to generate multi-channel heightmaps from shapefiles using 1-3 attributes. 
-useful for creating heightmaps for shaders (3d/glsl). mostly a way for me to learn how to use 
+An ultra-hacky one-off to generate multi-channel heightmaps from shapefiles using 1-3 attributes. 
+Useful for creating heightmaps for GL shaders. Mostly a way for me to learn how to use 
 PIL and read shapefiles.
 
-### requirements
-requires pyshp (`easy_install pyshp`) and PIL
+### Requirements
+Requires pyshp (`easy_install pyshp`) and PIL.
 
-### usage
+### Usage
 
 
     Usage: shp2img.py -f filename --rgb=attr1,attr2,attr3 [options]
