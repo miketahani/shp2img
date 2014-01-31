@@ -84,7 +84,7 @@ if __name__ == '__main__':
         ''
     ])
 
-    parser = CustomParser('Usage: %prog --rgb=attr1,attr2,attr3 [options]', epilog=epilog)
+    parser = CustomParser('Usage: %prog -f filename --rgb=attr1,attr2,attr3 [options]', epilog=epilog)
     add_option = parser.add_option
 
     add_option('--rgb',
@@ -98,7 +98,7 @@ if __name__ == '__main__':
                help='outfile name (defaults to stdout)')
     add_option('-s', '--size',
                dest='size', default=2048, type='int',
-               help='max output dimension (width/height will scale proportionally)')
+               help='max output dimension. width/height will scale proportionally. (defaults to 2048)')
     add_option('-e', '--extension',
                dest='ext', default='PNG',
                help='output file type (defaults to PNG)')
