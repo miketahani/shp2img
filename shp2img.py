@@ -74,7 +74,7 @@ if __name__ == '__main__':
     epilog = '\n'.join([
         '',
         'Channels Usage:',
-        '  you must define a shapefile attribute per r,g,b color channel.',
+        '  you must define a shapefile attribute for each r,g,b color channel.',
         '  leave placeholders for unused channels.',
         '',
         '  ex: --rgb=attr1,attr2,attr3 (all three channels)',
