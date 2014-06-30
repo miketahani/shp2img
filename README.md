@@ -6,6 +6,8 @@ An ultra-hacky one-off to generate multi-channel heightmaps from shapefiles usin
 Useful for creating heightmaps for GL shaders. Mostly a way for me to learn how to use 
 PIL and read shapefiles.
 
+Currently only works with WGS84-projected shapefiles that contain polygons.
+
 ### Requirements
 Requires pyshp (`easy_install pyshp`) and PIL.
 
