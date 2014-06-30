@@ -43,13 +43,7 @@ def draw_heightmap(channels):
 
     for shape in shapes:
         # do a linear interpolation of lnglats to fit inside our drawing frame
-        points = [
-            tuple([
-                  interpolate(lng, x), 
-                  interpolate(lat, y)
-            ]) 
-            for (lng, lat) in shape.shape.points
-        ]
+        points = [(interpolate(lng, x), interpolate(lat, y)) for (lng, lat) in shape.shape.points]
 
         channel_heights = [
             int(interpolate(shape.record[col], fills[i])) if col else 0 
