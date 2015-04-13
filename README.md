@@ -1,15 +1,13 @@
 ![sf building footprints data](https://raw.github.com/miketahani/shp2img/master/example_output.png)
 
 ### Description
-
-An ultra-hacky one-off to generate multi-channel heightmaps from shapefiles using 1-3 attributes. 
-Useful for creating heightmaps for GL shaders. Mostly a way for me to learn how to use 
-PIL and read shapefiles.
+An ultra-hacky one-off to generate multi-channel heightmaps from shapefiles using 1-3 numeric attributes. 
+Useful for creating heightmaps for GL shaders. Mostly a way for me to learn how to use PIL and read shapefiles.
 
 Currently only works with WGS84-projected shapefiles that contain polygons.
 
 ### Requirements
-Requires pyshp (`easy_install pyshp`) and PIL.
+Requires pyshp (`pip install pyshp`) and Pillow (`pip install Pillow`).
 
 ### Usage
 
@@ -37,3 +35,7 @@ Requires pyshp (`easy_install pyshp`) and PIL.
           --rgb=attr1,, (red)
           --rgb=,attr2, (green)
           --rgb=,,attr3 (blue)
+
+### TODO
+- use a projection instead of just relying on a mercator 1:1 grid
+- support more shapes than polygons
