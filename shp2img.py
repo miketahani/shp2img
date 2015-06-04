@@ -81,7 +81,8 @@ if __name__ == '__main__':
         '      --rgb=,attr2, (green)',
         '      --rgb=,,attr3 (blue)',
         ''
-        'NOTE: the shapefile attribute must be NUMERIC'
+        'NOTE: the shapefile attribute must be NUMERIC',
+        ''
     ])
 
     parser = CustomParser('Usage: %prog -f filename --rgb=attr1,attr2,attr3 [options]', epilog=epilog)
